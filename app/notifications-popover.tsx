@@ -87,11 +87,25 @@ function Inbox() {
           </div>
         ) : (
           <InboxNotificationList>
-            {inboxNotifications.map((inboxNotification) => {
+            {inboxNotifications.map((inboxNotification) => { 
               return (
                 <InboxNotification
                   key={inboxNotification.id}
                   inboxNotification={inboxNotification}
+                  kinds={{
+                    thread: (props) => (
+                      <InboxNotification.Thread
+                        {...props}
+                        showRoomName={true}
+                      />
+                    ),
+                    textMention: (props) => (
+                      <InboxNotification.TextMention
+                        {...props}
+                        showRoomName={false}
+                      />
+                    ),
+                  }}
                 />
               );
             })}

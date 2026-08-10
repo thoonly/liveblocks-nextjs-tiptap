@@ -1,6 +1,8 @@
 "use client";
 
 import NotificationsPopover from "../notifications-popover";
+import { MemberAvatars } from "../avatars";
+import UserPicker from "../user-picker";
 import { useEditor, EditorContent, Editor, Extension } from "@tiptap/react";
 import {
   useLiveblocksExtension,
@@ -14,9 +16,14 @@ import StarterKit from "@tiptap/starter-kit";
 import { useThreads } from "@liveblocks/react";
 import { useIsMobile } from "./use-is-mobile";
 import VersionsDialog from "../version-history-dialog";
+import { useAutoSubscribeThreads } from "../use-auto-subscribe-threads";
 
 export default function TiptapEditor() {
   const liveblocks = useLiveblocksExtension();
+
+  // Subscribe to every thread in this room, so notifications arrive for all of
+  // them and not just the threads this user created or was mentioned in
+  useAutoSubscribeThreads();
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -36,7 +43,9 @@ export default function TiptapEditor() {
 
   return (
     <div className="relative min-h-screen flex flex-col">
-      <div className="h-[60px] flex items-center justify-end px-4 border-b border-border/80 bg-background">
+      <div className="h-[60px] flex items-center justify-end gap-2 px-4 border-b border-border/80 bg-background">
+        <MemberAvatars />
+        <UserPicker />
         <VersionsDialog editor={editor} />
         <NotificationsPopover />
       </div>

@@ -1,6 +1,6 @@
 import { Liveblocks } from "@liveblocks/node";
 import { NextRequest, NextResponse } from "next/server";
-import { getRandomUser } from "../database";
+import { getRandomUser, getUser } from "../database";
 
 /**
  * Authenticating your Liveblocks application
@@ -16,8 +16,12 @@ export async function POST(request: NextRequest) {
     return new NextResponse("Missing LIVEBLOCKS_SECRET_KEY", { status: 403 });
   }
 
+  // The client can ask to connect as a specific user, so you can test as
+  // different people. Fall back to a random user when it doesn't.
+  const { userId } = await request.json().catch(() => ({ userId: null }));
+
   // Get the current user's unique id and info from your database
-  const user = getRandomUser();
+  const user = (userId ? getUser(userId) : null) ?? getRandomUser();
 
   // Create a session for the current user (access token auth)
   const session = liveblocks.prepareSession(`${user.id}`, {

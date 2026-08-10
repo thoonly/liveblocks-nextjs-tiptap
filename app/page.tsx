@@ -8,16 +8,40 @@ import {
 } from "@liveblocks/react/suspense";
 import { useSearchParams } from "next/navigation";
 import Editor from "./tiptap/editor";
+import { SessionUserProvider, useSessionUser } from "./session-user";
 
 // Learn how to structure your collaborative Next.js app
 // https://liveblocks.io/docs/guides/how-to-use-liveblocks-with-nextjs-app-directory
 
 export default function Page() {
+  return (
+    <SessionUserProvider>
+      <Room />
+    </SessionUserProvider>
+  );
+}
+
+function Room() {
   const roomId = useExampleRoomId("liveblocks:examples:nextjs-tiptap");
+  const { userId } = useSessionUser();
 
   return (
     <LiveblocksProvider
-      authEndpoint="/api/liveblocks-auth"
+      // Remount when the user changes, so Liveblocks authenticates again
+      key={userId ?? "random"}
+      authEndpoint={async (room) => {
+        const response = await fetch("/api/liveblocks-auth", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ room, userId }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Problem authenticating");
+        }
+
+        return await response.json();
+      }}
       resolveUsers={async ({ userIds }) => {
         const searchParams = new URLSearchParams(
           userIds.map((userId) => ["userIds", userId])
