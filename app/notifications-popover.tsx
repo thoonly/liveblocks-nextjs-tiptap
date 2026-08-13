@@ -3,7 +3,11 @@ import {
   useMarkAllInboxNotificationsAsRead,
   useUnreadInboxNotificationsCount,
 } from "@liveblocks/react/suspense";
-import { InboxNotification, InboxNotificationList } from "@liveblocks/react-ui";
+import {
+  InboxNotification,
+  InboxNotificationCustomKindProps,
+  InboxNotificationList,
+} from "@liveblocks/react-ui";
 import * as Popover from "@radix-ui/react-popover";
 import { Suspense } from "react";
 import Loading from "./loading";
@@ -49,6 +53,30 @@ export default function NotificationsPopover() {
         </Popover.Content>
       </Popover.Portal>
     </Popover.Root>
+  );
+}
+
+function WorkstreamRequestAccessNotification(
+  props: InboxNotificationCustomKindProps<"$workstreamRequestAccess">
+) {
+  const { data } = props.inboxNotification.activities.at(-1)!;
+
+  return (
+    <InboxNotification.Custom
+      {...props}
+      title={data.title}
+      aside={
+        <InboxNotification.Icon>
+          <img
+            src={data.requesterProfileImage}
+            alt=""
+            className="w-full h-full object-cover rounded-full"
+          />
+        </InboxNotification.Icon>
+      }
+    >
+      {data.message}
+    </InboxNotification.Custom>
   );
 }
 
@@ -104,6 +132,9 @@ function Inbox() {
                         {...props}
                         showRoomName={false}
                       />
+                    ),
+                    $workstreamRequestAccess: (props) => (
+                      <WorkstreamRequestAccessNotification {...props} />
                     ),
                   }}
                 />

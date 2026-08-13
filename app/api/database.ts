@@ -1,69 +1,29 @@
 // A mock database with example users
 const USER_INFO: Liveblocks["UserMeta"][] = [
   {
-    id: "charlie.layne@example.com",
+    id: "48cdf99f-9cb4-4921-ba92-a8c754c89cd2",
     info: {
-      name: "Charlie Layne",
+      name: "Arm",
       color: "#D583F0",
       avatar: "https://liveblocks.io/avatars/avatar-1.png",
     },
   },
   {
-    id: "mislav.abha@example.com",
+    id: "6796d3f7-7e74-4392-856e-a02de695bf6f",
     info: {
-      name: "Mislav Abha",
+      name: "Thoonly",
       color: "#F08385",
       avatar: "https://liveblocks.io/avatars/avatar-2.png",
     },
   },
   {
-    id: "tatum.paolo@example.com",
-    info: {
-      name: "Tatum Paolo",
-      color: "#F0D885",
-      avatar: "https://liveblocks.io/avatars/avatar-3.png",
-    },
-  },
-  {
-    id: "anjali.wanda@example.com",
-    info: {
-      name: "Anjali Wanda",
-      color: "#85EED6",
-      avatar: "https://liveblocks.io/avatars/avatar-4.png",
-    },
-  },
-  {
-    id: "jody.hekla@example.com",
-    info: {
-      name: "Jody Hekla",
-      color: "#85BBF0",
-      avatar: "https://liveblocks.io/avatars/avatar-5.png",
-    },
-  },
-  {
-    id: "emil.joyce@example.com",
-    info: {
-      name: "Emil Joyce",
-      color: "#8594F0",
-      avatar: "https://liveblocks.io/avatars/avatar-6.png",
-    },
-  },
-  {
-    id: "jory.quispe@example.com",
-    info: {
-      name: "Jory Quispe",
-      color: "#85DBF0",
-      avatar: "https://liveblocks.io/avatars/avatar-7.png",
-    },
-  },
-  {
-    id: "quinn.elton@example.com",
-    info: {
-      name: "Quinn Elton",
-      color: "#87EE85",
-      avatar: "https://liveblocks.io/avatars/avatar-8.png",
-    },
-  },
+    id:"f1b3a7e1-6773-4f81-8916-d426b682d8a3",
+    info:{
+      name:"Withoon",
+      color:"#FFFFF00",
+      avatar:"https://liveblocks.io/avatars/avatar-3.png"
+    }
+  }
 ];
 
 export function getRandomUser() {

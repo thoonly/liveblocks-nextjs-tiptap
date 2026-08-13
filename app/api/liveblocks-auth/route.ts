@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
   });
 
   // Use a naming pattern to allow access to rooms with a wildcard
-  session.allow(`liveblocks:examples:*`, ["*:write"]);
+  session.allow(`1fbbaef0-4f0c-48a1-9478-d2a885ddcb8a`, ["*:write"]);
 
   // Authorize the user and return the result
   const { status, body } = await session.authorize();

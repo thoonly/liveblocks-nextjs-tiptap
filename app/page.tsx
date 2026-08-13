@@ -22,7 +22,7 @@ export default function Page() {
 }
 
 function Room() {
-  const roomId = useExampleRoomId("liveblocks:examples:nextjs-tiptap");
+  const roomId = useExampleRoomId("1fbbaef0-4f0c-48a1-9478-d2a885ddcb8a");
   const { userId } = useSessionUser();
 
   return (

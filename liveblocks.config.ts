@@ -8,6 +8,18 @@ declare global {
         color: string;
       };
     };
+    ActivitiesData: {
+      $workstreamRequestAccess: {
+        title: string;
+        status: "RequestPending" | "RequestApproved" | "RequestDenied";
+        message: string;
+        workstreamUuid: string;
+        participantUuid: string;
+        workstreamTitle: string;
+        requesterProfileUuid: string;
+        requesterProfileImage: string;
+      };
+    };
   }
 }
 
