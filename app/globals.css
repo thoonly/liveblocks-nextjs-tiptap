@@ -130,3 +130,50 @@ li::marker {
   text-align: start !important;
   text-align-last: start !important;
 }
+
+/*
+ * Comment-thread marks (`.lb-tiptap-thread-mark`) are styled by Liveblocks via
+ * `--lb-accent`, but that variable is only ever defined on `.lb-root`, which
+ * wraps individual Thread/Composer components — not the raw ProseMirror
+ * content rendered by <EditorContent>. So outside of the sidebar's Thread
+ * list, the mark has no accent color to inherit and renders with a
+ * transparent background. We set explicit mark colors ourselves, scoped to
+ * each editor surface, so the main editor and the read-only mirror get
+ * distinct, visible highlight colors instead of relying on that chain.
+ */
+.main-editor-surface {
+  --mark-bg: rgb(23 119 255 / 14%);
+  --mark-bg-dark: rgb(23 119 255 / 30%);
+  --mark-decoration: rgb(23 119 255 / 65%);
+  --mark-color-selected: #1177ff;
+}
+
+.thread-highlight-mirror {
+  --mark-bg: rgb(249 115 22 / 16%);
+  --mark-bg-dark: rgb(249 115 22 / 32%);
+  --mark-decoration: rgb(249 115 22 / 70%);
+  --mark-color-selected: #f97316;
+}
+
+.main-editor-surface .lb-tiptap-thread-mark:not([data-orphan="true"], [data-hidden]),
+.thread-highlight-mirror .lb-tiptap-thread-mark:not([data-orphan="true"], [data-hidden]) {
+  background: var(--mark-bg);
+  text-decoration-color: var(--mark-decoration);
+}
+
+@media (prefers-color-scheme: dark) {
+  .main-editor-surface .lb-tiptap-thread-mark:not([data-orphan="true"], [data-hidden]),
+  .thread-highlight-mirror .lb-tiptap-thread-mark:not([data-orphan="true"], [data-hidden]) {
+    background: var(--mark-bg-dark);
+  }
+}
+
+.main-editor-surface
+  .lb-tiptap-thread-mark:not([data-orphan="true"], [data-hidden])
+  .lb-tiptap-thread-mark-selected,
+.thread-highlight-mirror
+  .lb-tiptap-thread-mark:not([data-orphan="true"], [data-hidden])
+  .lb-tiptap-thread-mark-selected {
+  color: var(--mark-color-selected);
+  text-decoration-color: var(--mark-color-selected);
+}

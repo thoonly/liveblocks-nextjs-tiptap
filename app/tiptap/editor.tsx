@@ -3,7 +3,7 @@
 import NotificationsPopover from "../notifications-popover";
 import { MemberAvatars } from "../avatars";
 import UserPicker from "../user-picker";
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useEditor, EditorContent, Editor, Extension } from "@tiptap/react";
 import {
   useLiveblocksExtension,
@@ -13,11 +13,13 @@ import {
   Toolbar,
   FloatingToolbar,
 } from "@liveblocks/react-tiptap";
+import { Thread, ThreadProps } from "@liveblocks/react-ui";
 import StarterKit from "@tiptap/starter-kit";
 import { useThreads } from "@liveblocks/react";
 import { useIsMobile } from "./use-is-mobile";
 import VersionsDialog from "../version-history-dialog";
 import { useAutoSubscribeThreads } from "../use-auto-subscribe-threads";
+import ThreadHighlightEditor from "./thread-highlight-editor";
 
 const NODE_TYPES = ["Entry", "Trigger", "Intent Clarity", "Planning"] as const;
 type NodeType = (typeof NODE_TYPES)[number];
@@ -25,6 +27,7 @@ type NodeType = (typeof NODE_TYPES)[number];
 export default function TiptapEditor() {
   const liveblocks = useLiveblocksExtension({field:'input'});
   const [nodeType, setNodeType] = useState<NodeType>("Entry");
+  const [focusedThreadId, setFocusedThreadId] = useState<string | null>(null);
 
   // Subscribe to every thread in this room, so notifications arrive for all of
   // them and not just the threads this user created or was mentioned in
@@ -45,6 +48,10 @@ export default function TiptapEditor() {
       liveblocks as Extension,
     ],
   });
+
+  const handleThreadFocus = useCallback((threadId: string) => {
+    setFocusedThreadId(threadId);
+  }, []);
 
   return (
     <div className="relative min-h-screen flex flex-col">
@@ -68,8 +75,8 @@ export default function TiptapEditor() {
       <div className="border-b border-border/80 bg-background">
         <Toolbar editor={editor} className="w-full" />
       </div>
-      <div className="relative flex flex-row justify-between w-full py-16 xl:pl-[250px] pl-[100px] gap-[50px]">
-        <div className="relative flex flex-1 flex-col gap-2">
+      <div className="relative flex flex-row justify-between w-full pt-16 xl:pl-[80px] pl-[40px] gap-[24px]">
+        <div className="main-editor-surface relative flex flex-1 flex-col gap-2">
           <EditorContent editor={editor} />
           <FloatingComposer
             editor={editor}
@@ -80,28 +87,58 @@ export default function TiptapEditor() {
         </div>
 
         <div className="xl:[&:not(:has(.lb-tiptap-anchored-threads))]:pr-[200px] [&:not(:has(.lb-tiptap-anchored-threads))]:pr-[50px]">
-          <Threads editor={editor} />
+          <Threads editor={editor} onThreadFocus={handleThreadFocus} />
         </div>
+      </div>
+
+      <div className="w-full px-[40px] xl:px-[80px] pb-16">
+        <ThreadHighlightEditor focusedThreadId={focusedThreadId} />
       </div>
     </div>
   );
 }
 
-function Threads({ editor }: { editor: Editor | null }) {
+function Threads({
+  editor,
+  onThreadFocus,
+}: {
+  editor: Editor | null;
+  onThreadFocus: (threadId: string) => void;
+}) {
   const { threads } = useThreads();
   const isMobile = useIsMobile();
+
+  // Never swap this between defined and undefined — Liveblocks renders it
+  // through a single stable wrapper component, so the hook count has to hold
+  const components = useMemo(
+    () => ({
+      Thread: (props: ThreadProps) => (
+        <Thread
+          {...props}
+          onClick={(event) => {
+            // Let Liveblocks select the thread first, so the mark decoration
+            // and active-card offset still happen
+            props.onClick?.(event);
+            onThreadFocus(props.thread.id);
+          }}
+        />
+      ),
+    }),
+    [onThreadFocus]
+  );
 
   if (!threads || !editor) {
     return null;
   }
 
   return isMobile ? (
-    <FloatingThreads threads={threads} editor={editor} />
+    <FloatingThreads threads={threads} editor={editor} components={components} />
   ) : (
     <AnchoredThreads
       threads={threads}
       editor={editor}
-      className="w-[350px] xl:mr-[100px] mr-[50px]"
+      components={components}
+      className="w-[350px]"
     />
   );
 }
