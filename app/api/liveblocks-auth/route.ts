@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
   });
 
   // Use a naming pattern to allow access to rooms with a wildcard
-  session.allow(`1fbbaef0-4f0c-48a1-9478-d2a885ddcb8a`, ["*:write"]);
+  session.allow(`9d5f1bba-5a79-4285-9103-9020a3e81690`, ["*:write"]);
 
   // Authorize the user and return the result
   const { status, body } = await session.authorize();
