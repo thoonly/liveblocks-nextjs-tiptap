@@ -22,7 +22,7 @@ export default function Page() {
 }
 
 function Room() {
-  const roomId = useExampleRoomId("9d5f1bba-5a79-4285-9103-9020a3e81690");
+  const roomId = useExampleRoomId("270b3dd6-c698-432b-b781-17abd22dc80c");
   const { userId } = useSessionUser();
 
   return (

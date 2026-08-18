@@ -23,7 +23,7 @@ const NODE_TYPES = ["Entry", "Trigger", "Intent Clarity", "Planning"] as const;
 type NodeType = (typeof NODE_TYPES)[number];
 
 export default function TiptapEditor() {
-  const liveblocks = useLiveblocksExtension();
+  const liveblocks = useLiveblocksExtension({field:'input'});
   const [nodeType, setNodeType] = useState<NodeType>("Entry");
 
   // Subscribe to every thread in this room, so notifications arrive for all of
