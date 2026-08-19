@@ -20,10 +20,18 @@ const USER_INFO: Liveblocks["UserMeta"][] = [
     id:"4b987d52-40f0-4d9e-8d09-59e74ed46118",
     info:{
       name:"Withoon",
-      color:"#FFFFF00",
+      color:"#FFFF00",
       avatar:"https://liveblocks.io/avatars/avatar-3.png"
     }
-  }
+  },
+  {
+    id:"f1b3a7e1-6773-4f81-8916-d426b682d8a3",
+    info:{
+      name:"Thoon",
+      color:"#00ff1a",
+      avatar:"https://liveblocks.io/avatars/avatar-4.png"
+    }
+  },
 ];
 
 export function getRandomUser() {
